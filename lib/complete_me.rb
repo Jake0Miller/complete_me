@@ -44,7 +44,22 @@ class CompleteMe
     words = []
 
     return [] if stack.empty?
+    words = find_all_words(stack, prefix_stack, words)
 
+    if find_word(prefix).selections.values.all? { |value| value == 0 }
+      return words
+    end
+    sort_words(prefix, words)
+  end
+
+  def sort_words(prefix, words)
+    selections = find_word(prefix).selections
+    words.sort do |a, b|
+      selections[a] <=> selections[b]
+    end.reverse
+  end
+
+  def find_all_words(stack, prefix_stack, words)
     until stack.empty?
       cur_node = stack.pop
       if cur_node == :blocker
@@ -57,10 +72,7 @@ class CompleteMe
         cur_node.children.values.each { |n| stack << n }
       end
     end
-    # selections = find_word(prefix).selections
-    # words.sort do |a, b|
-    #
-    # end.reverse
+    words
   end
 
   def populate(dict)

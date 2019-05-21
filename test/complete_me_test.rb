@@ -52,7 +52,6 @@ class CompleteMeTest < Minitest::Test
   end
 
   def test_select
-    skip
     @completion.populate(@dictionary)
 
     assert_equal 0, @completion.find_word("piz").selections["pizzeria"]
