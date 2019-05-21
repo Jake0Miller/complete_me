@@ -59,5 +59,14 @@ class CompleteMeTest < Minitest::Test
     @completion.select("piz", "pizzeria")
 
     assert_equal 1, @completion.find_word("piz").selections["pizzeria"]
+
+    @completion.select("pi", "pizza")
+    @completion.select("pi", "pizza")
+    @completion.select("pi", "pizzicato")
+
+    expected = ["pizzeria", "pize", "pizza", "pizzicato", "pizzle"]
+    assert_equal expected, @completion.suggest("piz")
+    expected = ["pizza", "pizzicato"]
+    assert_equal expected, @completion.suggest("pi")[0..1]
   end
 end
