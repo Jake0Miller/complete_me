@@ -32,7 +32,7 @@ class CompleteMe
   def find_word(word)
     word = word.chars.map { |char| char.to_sym }
     cur_node = @root
-    word_found = word.all? do |char|
+    word.each do |char|
       cur_node = cur_node.children[char]
     end
     cur_node
@@ -81,5 +81,35 @@ class CompleteMe
 
   def select(prefix, word)
     find_word(prefix).select(word)
+  end
+
+  def delete(word)
+    chars = word.chars.map { |char| char.to_sym }
+    cur_node = @root
+    node_stack = []
+    target = find_word(word)
+
+    chars.each do |char|
+      cur_node.selections.delete(word)
+      if cur_node.children[char] == target
+        cur_node.children.delete(char.to_sym)
+        @count -= 1
+        break
+      else
+        cur_node = cur_node.children[char]
+      end
+      node_stack.push(cur_node)
+    end
+
+    cur_node = node_stack.pop
+    until node_stack.empty?
+      if cur_node.children.length == 0 && !cur_node.is_word
+        next_node = node_stack.pop
+        next_node.children.delete(cur_node.char)
+        cur_node = next_node
+      else
+        cur_node = node_stack.pop
+      end
+    end
   end
 end

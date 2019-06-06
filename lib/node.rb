@@ -10,10 +10,10 @@ class Node
   end
 
   def insert(child)
-    if @children[child.char].nil?
-      @children[child.char] = child
+    if @children[child.to_sym].nil?
+      @children[child.to_sym] = Node.new(child)
     else
-      @children[child.char].insert(child)
+      @children[child.to_sym].insert(child)
     end
   end
 
